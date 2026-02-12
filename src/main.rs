@@ -1,7 +1,5 @@
 #[cfg(windows)]
 use arboard::Clipboard;
-#[cfg(windows)]
-use arboard::Clipboard;
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use crossterm::execute;
 use crossterm::terminal::{
@@ -16,7 +14,9 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Borders, Gauge, Paragraph, Wrap};
 use ratatui::{Frame, Terminal};
-use std::io::{self, Stdout, Write};
+use std::io::{self, Stdout};
+#[cfg(unix)]
+use std::io::Write;
 #[cfg(unix)]
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
