@@ -1,0 +1,12 @@
+[package]
+name = "GenPass"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+crossterm = "0.27"
+rand = "0.10.0"
+ratatui = "0.28"
+
+[target.'cfg(windows)'.dependencies]
+arboard = "3"
