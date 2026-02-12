@@ -65,6 +65,33 @@ fn check_password_strength(password: &str) -> &'static str {
     }
 }
 
+fn generate_password(
+    letters: i32,
+    uppercase: i32,
+    symbols: i32,
+    numbers: i32,
+    rng: &mut impl Rng,
+) -> String {
+    let mut generated: Vec<u8> = Vec::new();
+
+    for _ in 0..letters {
+        generated.push(*LETTERS.choose(rng).unwrap());
+    }
+    for _ in 0..uppercase {
+        let letter = *LETTERS.choose(rng).unwrap();
+        generated.push(letter.to_ascii_uppercase());
+    }
+    for _ in 0..symbols {
+        generated.push(*SYMBOLS.choose(rng).unwrap());
+    }
+    for _ in 0..numbers {
+        generated.push(*NUMBERS.choose(rng).unwrap());
+    }
+
+    generated.shuffle(rng);
+    String::from_utf8(generated).unwrap_or_default()
+}
+
 struct App {
     letters: i32,
     uppercase: i32,
@@ -96,25 +123,13 @@ impl App {
 
     fn generate_password(&mut self) {
         let mut rng = rng();
-        let mut generated: Vec<u8> = Vec::new();
-
-        for _ in 0..self.letters {
-            generated.push(*LETTERS.choose(&mut rng).unwrap());
-        }
-        for _ in 0..self.uppercase {
-            let letter = *LETTERS.choose(&mut rng).unwrap();
-            generated.push(letter.to_ascii_uppercase());
-        }
-        for _ in 0..self.symbols {
-            generated.push(*SYMBOLS.choose(&mut rng).unwrap());
-        }
-        for _ in 0..self.numbers {
-            generated.push(*NUMBERS.choose(&mut rng).unwrap());
-        }
-
-        generated.shuffle(&mut rng);
-
-        self.password = String::from_utf8(generated).unwrap_or_default();
+        self.password = generate_password(
+            self.letters,
+            self.uppercase,
+            self.symbols,
+            self.numbers,
+            &mut rng,
+        );
         self.strength = check_password_strength(&self.password).to_string();
     }
 
@@ -435,3 +450,6 @@ fn main() -> io::Result<()> {
 
     result
 }
+
+#[cfg(test)]
+mod tests;
