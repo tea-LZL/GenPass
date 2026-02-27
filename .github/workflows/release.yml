@@ -21,7 +21,7 @@ jobs:
             binary_name: GenPass
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            artifact_name: GenPass-windows-x64
+            artifact_name: GenPass-windows-x64.exe
             binary_name: GenPass.exe
 
     steps:
